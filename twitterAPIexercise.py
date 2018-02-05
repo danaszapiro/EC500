@@ -5,6 +5,16 @@ import tweepy #https://github.com/tweepy/tweepy
 import wget
 import os
 import subprocess
+import json
+import urllib 
+import requests
+import io
+import re
+
+from google.cloud import vision
+
+from google.cloud.vision import types
+from os import listdir
 
 #Twitter API credentials
 consumer_key = "consumer_key"
@@ -63,13 +73,43 @@ def get_all_tweets(screen_name):
     
     #Download all media files found
     for media_file in media_files:
-        wget.download(media_file)
-        
+        wget.download(media_file, "./output")
+     
 def make_video():
         #use subprocess.call to make video from images using Ffmpeg
-        subprocess.call("ffmpeg -pattern_type glob -framerate 6 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
+        subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 6 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
+ 
+def lable_images(): 
+    # google vision API to lable images in output folder
+    client = vision.ImageAnnotatorClient()
+    file = open("./output/imagelabels.txt","w")
     
+    pictures = [pic for pic in listdir("./output") if pic.endswith('jpg')]
+    for picture in pictures:
+        file_name = os.path.join(os.path.dirname(__file__),"output",picture)
+
+        # Loads the image into memory
+        with io.open(file_name, 'rb') as image_file:
+             content = image_file.read()
+       
+        image = types.Image(content=content)
+
+        # Performs label detection on the image file
+        response = client.label_detection(image=image)
+        labels = response.label_annotations
+       
+        file.write('Lables for  '+i+'  :\n')
+        print('Labels:')
+        
+        for label in labels:
+           
+           file.write(label.description+'\n')
+           print(label.description)
+        
+    file.close()
+     
 if __name__ == '__main__':
     #pass in the username of the account you want to download
-    get_all_tweets("@twitter_username")
+    get_all_tweets("@twitterUsername")
     make_video()
+    lable_images()
