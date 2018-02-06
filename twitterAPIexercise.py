@@ -16,11 +16,12 @@ from google.cloud import vision
 from google.cloud.vision import types
 from os import listdir
 
+
 #Twitter API credentials
-consumer_key = "consumer_key"
-consumer_secret = "consumer_secret"
-access_key = "access_key"
-access_secret = "access_secret"
+consumer_key = "DUWabEnlcyaSxY66iiXsXG79B"
+consumer_secret = "gIFI2dcLQojX16S7PMfAlY7sqXLIXBbLfxco9BOahh0ImvryPN"
+access_key = "956293760991858688-MsYikHcUETXAvYwKRbbyDxWNntkXfJX"
+access_secret = "QbcpI7oYrfgor5eRozN7gA8NcLBPWJBkjfzcUseJXl9yA"
 
 
 def get_all_tweets(screen_name):
@@ -79,6 +80,17 @@ def make_video():
         #use subprocess.call to make video from images using Ffmpeg
         subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 6 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
  
+def implicit():
+    from google.cloud import storage
+
+    # If you don't specify credentials when constructing the client, the
+    # client library will look for credentials in the environment.
+    storage_client = storage.Client()
+
+    # Make an authenticated API request
+    buckets = list(storage_client.list_buckets())
+    print(buckets)
+     
 def lable_images(): 
     # google vision API to lable images in output folder
     client = vision.ImageAnnotatorClient()
@@ -88,28 +100,28 @@ def lable_images():
     for picture in pictures:
         file_name = os.path.join(os.path.dirname(__file__),"output",picture)
 
-        # Loads the image into memory
+        #Loads the image into memory
         with io.open(file_name, 'rb') as image_file:
              content = image_file.read()
        
         image = types.Image(content=content)
 
-        # Performs label detection on the image file
+        #Performs label detection on the image file
         response = client.label_detection(image=image)
         labels = response.label_annotations
        
-        file.write('Lables for  '+i+'  :\n')
+        file.write('Lables for  '+picture+'  :\n')
         print('Labels:')
         
         for label in labels:
            
-           file.write(label.description+'\n')
-           print(label.description)
+          file.write(label.description+'\n')
+          print(label.description)
         
     file.close()
      
 if __name__ == '__main__':
     #pass in the username of the account you want to download
-    get_all_tweets("@twitterUsername")
-    make_video()
+    get_all_tweets("@Ibra_official")
     lable_images()
+    make_video()
