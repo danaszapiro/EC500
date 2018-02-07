@@ -15,13 +15,14 @@ from google.cloud import vision
 
 from google.cloud.vision import types
 from os import listdir
-
+from pickle import FALSE
+from symbol import except_clause
 
 #Twitter API credentials
-consumer_key = "DUWabEnlcyaSxY66iiXsXG79B"
-consumer_secret = "gIFI2dcLQojX16S7PMfAlY7sqXLIXBbLfxco9BOahh0ImvryPN"
-access_key = "956293760991858688-MsYikHcUETXAvYwKRbbyDxWNntkXfJX"
-access_secret = "QbcpI7oYrfgor5eRozN7gA8NcLBPWJBkjfzcUseJXl9yA"
+consumer_key = "consumer_key"
+consumer_secret = "consumer_secret"
+access_key = "access_key"
+access_secret = "access_secret"
 
 
 def get_all_tweets(screen_name):
@@ -31,11 +32,23 @@ def get_all_tweets(screen_name):
     auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
     
+    #verifys credentials
+    valid_credentials = api.verify_credentials()
+    if (valid_credentials == False):
+        print "Incorrect credentials"
+        return False
+    
     #initialize a list to hold all the tweepy Tweets
     alltweets = []    
     
-    #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=10)
+    #make initial request for 10 most recent tweets 
+    #throws exception and breaks program
+    try:
+        new_tweets = api.user_timeline(screen_name = screen_name,count=10)
+    except tweepy.TweepError as e:
+        print('ERROR: could not download tweeter feed. \nBelow is the printed exception')
+        print(e)
+        return False
     
     #save most recent tweets
     alltweets.extend(new_tweets)
@@ -67,35 +80,35 @@ def get_all_tweets(screen_name):
         if(len(media) > 0):
             media_files.add(media[0]['media_url'])
             print "...%s" % (media)
-    if(len(media_files) == 0):    
-        print"...ERROR: No media in tweeter feed !!" 
-    else :
-        print "...%s media tweets downloaded so far" % (len(media_files))
+        if(len(media_files) == 0):    
+            print"...ERROR: No media in tweeter feed !!" 
+            return False
+            break
+        else :
+            print "...%s media tweets downloaded so far" % (len(media_files))
     
     #Download all media files found
     for media_file in media_files:
         wget.download(media_file, "./output")
-     
+    
+    return True
+
+#Function definition to make video from images using Ffmpeg     
 def make_video():
-        #use subprocess.call to make video from images using Ffmpeg
-        subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 6 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
- 
-def implicit():
-    from google.cloud import storage
+    
+        #uses subprocess.call to use the ffmpeg command, also crops images to fit within frame
+        subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 5 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
 
-    # If you don't specify credentials when constructing the client, the
-    # client library will look for credentials in the environment.
-    storage_client = storage.Client()
-
-    # Make an authenticated API request
-    buckets = list(storage_client.list_buckets())
-    print(buckets)
-     
+#Function definition, uses google vision API to lable all images located in output folder 
 def lable_images(): 
-    # google vision API to lable images in output folder
+    
+    #creates google vision API client
     client = vision.ImageAnnotatorClient()
+    
+    #creates ouput file to write lables
     file = open("./output/imagelabels.txt","w")
     
+    #for loop to go through .jpg pictures in output folder
     pictures = [pic for pic in listdir("./output") if pic.endswith('jpg')]
     for picture in pictures:
         file_name = os.path.join(os.path.dirname(__file__),"output",picture)
@@ -110,11 +123,12 @@ def lable_images():
         response = client.label_detection(image=image)
         labels = response.label_annotations
        
+       #writes current image  URL
         file.write('Lables for  '+picture+'  :\n')
-        print('Labels:')
+        print('Labels:' + picture)
         
         for label in labels:
-           
+          #writes current image labels 
           file.write(label.description+'\n')
           print(label.description)
         
@@ -122,6 +136,9 @@ def lable_images():
      
 if __name__ == '__main__':
     #pass in the username of the account you want to download
-    get_all_tweets("@Ibra_official")
-    lable_images()
-    make_video()
+    valid_tweetfeed = get_all_tweets("@tweeter_username")
+    
+    #Only calls functions if media download from tweeter feed was successful
+    if (valid_tweetfeed):
+        lable_images()
+        make_video()
