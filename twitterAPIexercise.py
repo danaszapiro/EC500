@@ -145,7 +145,7 @@ if __name__ == '__main__':
     try:
         valid_tweetfeed = get_all_tweets("@twitter_username")
     
-        #Only calls functions if media download from tweeter feed was successful
+        #Only calls subsequent functions if media download from twitter feed was successful
         if (valid_tweetfeed):
             lable_images()
             make_video()
@@ -153,6 +153,6 @@ if __name__ == '__main__':
         print ("ERROR: unknown")
     else:
         if (valid_tweetfeed):
-            print("Done. Program successfull")
+            print("Done. Program successful")
         else:
-            print ("ERROR: Unable ro run programfor the selected tweeter feed.\nPlease try again with another username")
+            print ("ERROR: Unable ro run program for the selected twitter feed.\nPlease try again with another username")
