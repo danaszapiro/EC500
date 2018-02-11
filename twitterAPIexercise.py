@@ -46,7 +46,7 @@ def get_all_tweets(screen_name):
     try:
         new_tweets = api.user_timeline(screen_name = screen_name,count=10)
     except tweepy.TweepError as e:
-        print('ERROR: could not download tweeter feed. \nBelow is the printed exception')
+        print('ERROR: could not download tweeter feed. \nException description:')
         print(e)
         return False
     
@@ -76,14 +76,15 @@ def get_all_tweets(screen_name):
     
     #for each tweet check if it contains media files and add them to the media_files set
     for status in alltweets:
-        media = status.entities.get('media', [])
-        if(len(media) > 0):
-            media_files.add(media[0]['media_url'])
+        try:
+            media = status.entities.get('media', [])
+            if(len(media) > 0):
+                media_files.add(media[0]['media_url'])
             print "...%s" % (media)
-        if(len(media_files) == 0):    
-            print"...ERROR: No media in tweeter feed !!" 
+        except:  
+            print"ERROR: No media in tweeter feed !!" 
             return False
-            break
+        
         else :
             print "...%s media tweets downloaded so far" % (len(media_files))
     
@@ -97,8 +98,13 @@ def get_all_tweets(screen_name):
 def make_video():
     
         #uses subprocess.call to use the ffmpeg command, also crops images to fit within frame
-        subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 5 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
-
+        try:
+            subprocess.call("cd ./output && ffmpeg -pattern_type glob -framerate 5 -i '*.jpg' -vf 'scale=w=1280:h=720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2' -vcodec libx264 out.mp4", shell=True)
+        except (RuntimeError, TypeError,NameError):
+            print ("ERROR: ffmpeg unable to to create video")
+            pass
+        else: 
+            print("Video done. Saved as out.mp4")
 #Function definition, uses google vision API to lable all images located in output folder 
 def lable_images(): 
     
@@ -124,8 +130,8 @@ def lable_images():
         labels = response.label_annotations
        
        #writes current image  URL
-        file.write('Lables for  '+picture+'  :\n')
-        print('Labels:' + picture)
+        file.write('Lables for  '+picture+' :\n')
+        print('Lables:' + picture)
         
         for label in labels:
           #writes current image labels 
@@ -135,10 +141,18 @@ def lable_images():
     file.close()
      
 if __name__ == '__main__':
-    #pass in the username of the account you want to download
-    valid_tweetfeed = get_all_tweets("@tweeter_username")
+    #pass in the username of the account you want to download feed from
+    try:
+        valid_tweetfeed = get_all_tweets("@tweeter_username")
     
-    #Only calls functions if media download from tweeter feed was successful
-    if (valid_tweetfeed):
-        lable_images()
-        make_video()
+        #Only calls functions if media download from tweeter feed was successful
+        if (valid_tweetfeed):
+            lable_images()
+            make_video()
+    except:
+        print ("ERROR: unknown")
+    else:
+        if (valid_tweetfeed):
+            print("Done. Program successfull")
+        else:
+            print ("ERROR: Unable ro run programfor the selected tweeter feed.\nPlease try again with another username")
