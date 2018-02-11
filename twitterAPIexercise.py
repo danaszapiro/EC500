@@ -143,7 +143,7 @@ def lable_images():
 if __name__ == '__main__':
     #pass in the username of the account you want to download feed from
     try:
-        valid_tweetfeed = get_all_tweets("@tweeter_username")
+        valid_tweetfeed = get_all_tweets("@twitter_username")
     
         #Only calls functions if media download from tweeter feed was successful
         if (valid_tweetfeed):
