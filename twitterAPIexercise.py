@@ -105,13 +105,13 @@ def make_video():
             pass
         else: 
             print("Video done. Saved as out.mp4")
-#Function definition, uses google vision API to lable all images located in output folder 
-def lable_images(): 
+#Function definition, uses google vision API to label all images located in output folder 
+def label_images(): 
     
     #creates google vision API client
     client = vision.ImageAnnotatorClient()
     
-    #creates ouput file to write lables
+    #creates ouput file to write labels
     file = open("./output/imagelabels.txt","w")
     
     #for loop to go through .jpg pictures in output folder
@@ -130,8 +130,8 @@ def lable_images():
         labels = response.label_annotations
        
        #writes current image  URL
-        file.write('Lables for  '+picture+' :\n')
-        print('Lables:' + picture)
+        file.write('Labels for  '+picture+' :\n')
+        print('Labels:' + picture)
         
         for label in labels:
           #writes current image labels 
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     
         #Only calls subsequent functions if media download from twitter feed was successful
         if (valid_tweetfeed):
-            lable_images()
+            label_images()
             make_video()
     except:
         print ("ERROR: unknown")
