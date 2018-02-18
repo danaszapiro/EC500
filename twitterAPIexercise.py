@@ -23,10 +23,10 @@ from pickle import FALSE
 from symbol import except_clause
 
 # Twitter API credentials
-consumer_key = 'wfDptTHlFTXdFwSbw0QcmLALQ'
-consumer_secret = '7hfBHkbcvkcDlbSZj7razvHGX4WqDCPdonm9BuFfB5iCeLV6L2'
-access_key = '2507092641-mOuulRjyZcGFwPGLCk5bTXangxBUHX286xD9kVW'
-access_secret = 'L7KKIovRnkRdury1G4NzrcyuchNsdaotS4PPbJIj6vxGq'
+consumer_key = ''
+consumer_secret = ''
+access_key = ''
+access_secret = ''
 
 
 def get_all_tweets(screen_name):
