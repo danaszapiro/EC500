@@ -23,7 +23,7 @@ Images of Website
 ------------------
 
 ![alt text](https://github.com/danaszapiro/EC500/blob/app/website-images/ec500-1.png)
-
+![alt text](https://github.com/danaszapiro/EC500/blob/app/website-images/ec500-2.png)
 
 
 Twitter APIs exrcise using Python
