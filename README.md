@@ -18,6 +18,7 @@ Code review completed. All review issues are under the 'Issues' tab in this repo
  - Running proram multiple times leaves behind old images
  - Saving video try catch block doesn't output ffmpeg errors
  - ffmpeg implementation only works with OSX
+ - Performance - Syncronous, must wait until all of the images are computed to output keywords
 
 Website
 --------
