@@ -11,6 +11,8 @@ import requests
 import io
 import re
 import glob
+from shutil import copyfile
+
 
 
 from google.cloud import vision
@@ -111,7 +113,10 @@ def make_video():
             os.rename(oldfile, newfile)
 
         os.chdir(r"C:\Users\antth\PycharmProjects\EC500Project2\output")
-        os.system('ffmpeg -y -loglevel panic -framerate 1/3 -i image%d.jpg video.avi')
+        os.system('ffmpeg -y -loglevel panic -framerate 1/3 -i image%d.jpg video.mp4')
+        copyfile("C:/Users/antth/PycharmProjects/EC500Project2/output/video.mp4", "C:/Users/antth/PycharmProjects/EC500Project2/static/video.mp4")
+        copyfile("C:/Users/antth/PycharmProjects/EC500Project2/output/imagelabels.txt", "C:/Users/antth/PycharmProjects/EC500Project2/static/imagelabels.txt")
+
 
     except (RuntimeError, TypeError, NameError):
         print("ERROR: ffmpeg unable to to create video")
