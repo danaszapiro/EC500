@@ -2,11 +2,22 @@ Program to Use @danaszapiro 's API
 -----------------------------------
 Anthony Pasquariello
 
+app.py
+ - This python application uses the API 3 times
+ - Once to retrieve tweets from BU_Tweets. This works well!
+ - Second time to check how it handles error handling. Works well!
+ - Third to try and break it. 
+ 
+ 
+Code Review
+------------
 
+Code review completed. Found 7 issues. Some small and some a bit larger. All in all a great API though!
 
+Website
+--------
 
-
-
+I built my website using Flask for Python. The home page allows users to enter a Twitter handle and hit the submit button. The submit button runs the program with danaszapiro's API. When it completes it will redirect to the output.html page. This page will play the video that was created and list the descriptor words given by Google's Image recongnition.
 
 
 
