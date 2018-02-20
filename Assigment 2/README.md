@@ -12,7 +12,7 @@ Reviewer: Dana Szapiro
 - Run code with python3 app.py
 - Navegate in browser to http://127.0.0.1:5000/
 
-#) Code Review
+3) Code Review
 The twitter.py module was functional but was missing several key factors from the assigment:
 - It did not include the Google Vision API and was not doing any image recognition on the downloaded pictures from the twitter feed.
 - There was almost no error handeling code. Most exceptions were handled by the API that the function was calling.
