@@ -1,4 +1,4 @@
-#EC500 Assigment 2
+# EC500 Assigment 2
 Reviewer: Dana Szapiro
 
 1)Test.py
@@ -19,5 +19,5 @@ The twitter.py module was functional but was missing several key factors from th
 - Provided no information in the Readme file so it made it more difficult to start working with the code. 
 Additionally, the code was design to be syncronous which makes the waiting time very long. It also stores all of the tweets in the feed in a file that never gets cleaned up which can also make it not very efficient memorywise.
 
-#Program Runtime: 29.606 seconds
-#Size of Memory required: 6464496 Bytes
+# Program Runtime: 29.606 seconds
+# Size of Memory required: 6464496 Bytes
