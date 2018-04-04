@@ -66,7 +66,8 @@ def Insert(code, lat, lon, name, city, state, country, woeid, tz, phone, email, 
         
     except Exception, e:
         print str(e)
-        
+
+#function to prompt user for action to perform        
  def main(): 
      if __name__ == "__main__":
         os.system("mongod")
