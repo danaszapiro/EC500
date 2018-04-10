@@ -156,7 +156,7 @@ def lable_images():
     file.close()
     insertMongo("katyperry", datetime.datetime.now(), labelData, len(pictures))
     
-# function to connect to Mongodb and initialize database
+# function to connect to Mongodb initialize and update database
 def InitializeMongo():
     client = MongoClient('localhost:27017')
     db = client.TwitterFeed
