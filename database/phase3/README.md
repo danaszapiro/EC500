@@ -1,4 +1,4 @@
-#Twitter APIs exrcise using Python
+# Twitter APIs exrcise using Python
 
 APIs and libraries used:
 - tweepy to download user feed and extract media
@@ -8,7 +8,7 @@ APIs and libraries used:
  - google vision API
 
 
-##Installation
+## Installation
 
 install the latest version of each one of the APIs
 1) Install mongoDB
@@ -20,7 +20,7 @@ install the latest version of each one of the APIs
 7) To set up the authentication credential for google cloud follow intructions on the following link: https://cloud.google.com/vision/docs/reference/libraries
 8) clone git repository
 
-##Usage
+## Usage
 
 1) Replace twitter API credentials with actual tokens in the twitterFeed.py file
 2) Run mongod on another tarminal shell to have the mongoDB deamon running on the background
@@ -34,10 +34,14 @@ install the latest version of each one of the APIs
      "handler" : handler,
      "date" : date,
      "labels" : [
-                    { "description" : description,
-                      "score" : score},
-                    { "description" : description,
-                      "score" : score}
+                    {
+                        "description" : description,
+                        "score" : score
+                    },
+                    { 
+                        "description" : description,
+                        "score" : score
+                    }
                 ]
      "imageCount" : imageCount        
 }
