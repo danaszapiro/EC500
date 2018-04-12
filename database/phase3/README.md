@@ -28,20 +28,17 @@ install the latest version of each one of the APIs
 4) The GoogleVision API is used to analyze the media
 5) All labels and scores from the analysis are stored in the database with the corresponding twitter handle, number of images analyzed and date accessed
 
-###DataBase Format
+### DataBase Format
 
 {
+
      "handler" : handler,
      "date" : date,
      "labels" : [
-                    {
-                        "description" : description,
-                        "score" : score
-                    },
-                    { 
-                        "description" : description,
-                        "score" : score
-                    }
+			{ "description" : description,
+              "score" : score },
+            { "description" : description,
+               "score" : score }
                 ]
      "imageCount" : imageCount        
 }
