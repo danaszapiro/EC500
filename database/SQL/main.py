@@ -5,14 +5,13 @@ Created on Apr 10, 2018
 '''
 import twitterFeed as tw
 import makeMovie as movie
-import mongoDatabase as db
+import databaseSQL as db
 import googleVision as ggl
 
 import wget
 import os
 import shutil
 import datetime
-from pymongo import MongoClient
 
 from google.cloud import vision
 
@@ -23,7 +22,7 @@ output = "./output"
 imageLabels = []
 
 def main():   
-
+    db.initialize_database();
     twitterHandles = ["katyperry", "justinbieber", "barackobama",
                   "rihanna", "taylorswift13", "ladygaga",
                   "YouTube", "Cristiano", "realdonaldtrump",
@@ -32,7 +31,6 @@ def main():
                   "instagram", "NASA", "TheEconomist", "NatGeo"]
     
     for handle in twitterHandles:
-        imageLabels[:] = []
 
         #make/clean output file
         if os.path.exists(output):
@@ -44,11 +42,12 @@ def main():
         try:
             #download media from twitterFeed
             imageCount = tw.get_all_tweets(handle, output)
+            db.insertTwitterHandle(handle, imageCount, datetime.datetime.now())
             # Only calls subsequent functions if media download from twitter feed was successful
             if (imageCount > 0):
-                imageLabels.append(ggl.lable_images())
+                ggl.lable_images(handle)
                 movie.make_video()
-                db.insertMongo(handle, datetime.datetime.now(), imageLabels, imageCount)
+               
             else:
                 print("ERROR: Unable ro run program for the selected twitter feed.\nPlease try again with another username")
         except Exception as e:
